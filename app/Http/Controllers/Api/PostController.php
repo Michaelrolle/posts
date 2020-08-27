@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Http\Resources\PostResource;
+use App\Http\Requests\StorePostRequest;
 
 class PostController extends Controller
 {
@@ -24,5 +25,12 @@ class PostController extends Controller
             $query->where('category_id', request('category_id'));
         })->orderBy($sortField, $sortDirection)->paginate(3);
         return PostResource::collection($posts);
+    }
+
+    public function store(StorePostRequest $request)
+    {
+        $post = Post::create($request->validated());
+
+        return new PostResource($post);
     }
 }
